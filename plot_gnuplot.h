@@ -33,7 +33,7 @@ namespace plotcpp
 	public:
 		plot_gnuplot()
 		{
-		
+			open();
 		}
 		~plot_gnuplot()
 		{

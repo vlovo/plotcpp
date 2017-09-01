@@ -4,11 +4,14 @@ SET(ProjectName "plotcpp")
 
 PROJECT(${ProjectName})
 
+set(CMAKE_CXX_STANDARD 11)
+
 find_file(GNUPLOT_EXECUTABLE "wgnuplot.exe")
 configure_file(plot_defines.h.in plot_defines.h)
 
 set(SRCS plot_gnuplot.cpp)
 set(HDRS plot_gnuplot.h)
+
 
 add_library(${ProjectName} ${SRCS} ${HDRS})
 target_include_directories(${ProjectName}  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR} PUBLIC ${CMAKE_CURRENT_BINARY_DIR} )
