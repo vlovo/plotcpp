@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) 2017 Markus Leitz
+ * Licensed under MIT License
+ *  
+ */
+
 #pragma once
 #include <iostream>
 #include <tuple>
