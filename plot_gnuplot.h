@@ -16,13 +16,13 @@
 
 #include "plot_types.h"
 #include "plot_defines.h"
-#include <regex>
+ 
 namespace plotcpp
 {
 	
 	std::string gpStr(const std::string &in)
 	{
-		std::regex rg;
+		 
 
 		return("\'" + in + "\'");
 	}
@@ -128,13 +128,23 @@ namespace plotcpp
 		}
 		void open()
 		{
-			std::string tmp = "X:\\gnuplot\\bin\\gnuplot.exe";// Gnuplot::m_sGNUPlotPath + "/" +Gnuplot::m_sGNUPlotFileName;
-			gnucmd = _popen(gpath.c_str(), "w");
+			 
+			#ifdef WIN32
+						gnucmd = _popen(gpath.c_str(), "w");
+			#else
+						gnucmd = popen(gpath.c_str(), "w");
+			#endif
+
 
 		}
 		void close()
 		{
-			_pclose(gnucmd);
+			
+			#ifdef WIN32
+						_pclose(gnucmd);
+			#else
+						pclose(gnucmd);
+			#endif
 
 			for (std::string f : listOfFilename)
 			{

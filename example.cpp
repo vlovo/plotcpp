@@ -29,7 +29,7 @@ int main()
 	plt << "set xlabel " + gpStr("Time [ms]") << "set ylabel " + gpStr("Dist");
 
 
-	for (;;)
+	for (int i=0;i <4;++i)
 	{
 
 		std::generate(begin(data), end(data), [&] {  return dist(mersenne_engine); });
