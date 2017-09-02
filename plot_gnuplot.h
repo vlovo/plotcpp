@@ -98,6 +98,23 @@ namespace plotcpp
 
 
 
+			std::ofstream file;
+			std::string tmpname = generateFilename();
+			file.open(tmpname);
+
+			std::for_each(begin(dataPoints), end(dataPoints), [&](Point3DType item) {
+
+				file << std::get<0>(item) << " " << std::get<1>(item) << " " << std::get<2>(item) << "\n";
+
+			});
+
+			flush(file);
+
+
+			buffer << gpStr(tmpname) << " using 1:2:3 with linespoint, ";
+			executeCmd("splot " + buffer.str());
+
+
 			return;
 		};
 
@@ -121,7 +138,7 @@ namespace plotcpp
 		{
 			static int counter;
 
-			listOfFilename.push_back(std::to_string(reinterpret_cast<int>(this)).append(std::to_string(counter)));
+			listOfFilename.push_back(std::string("gp").append(std::to_string(counter)));
 			counter++;
 			return(listOfFilename.back());
 

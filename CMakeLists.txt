@@ -1,12 +1,12 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
 
-SET(ProjectName "plotcpp")
+SET(ProjectName "plotcxx")
 
 PROJECT(${ProjectName})
 
 set(CMAKE_CXX_STANDARD 11)
 
-find_file(GNUPLOT_EXECUTABLE "wgnuplot.exe")
+find_file(GNUPLOT_EXECUTABLE "gnuplot.exe")
 configure_file(plot_defines.h.in plot_defines.h)
 
 set(SRCS plot_gnuplot.cpp)
@@ -18,6 +18,9 @@ target_include_directories(${ProjectName}  INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_executable(example example.cpp)
 target_link_libraries(example PRIVATE ${ProjectName})
+target_compile_features(example PRIVATE cxx_generic_lambdas)
+
+
 
 
 enable_testing()

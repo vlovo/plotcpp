@@ -3,9 +3,12 @@
  * Licensed under MIT License
  *  
  */
-#include <random>
+
 
 #include "plot_gnuplot.h"
+
+#include <random>
+#include <thread>
 
 using namespace plotcpp;
 
@@ -29,7 +32,7 @@ int main()
 	plt << "set xlabel " + gpStr("Time [ms]") << "set ylabel " + gpStr("Dist");
 
 
-	for (int i=0;i <4;++i)
+	for (int i=0; /*i<4*/ ;++i)
 	{
 
 		std::generate(begin(data), end(data), [&] {  return dist(mersenne_engine); });
@@ -49,7 +52,8 @@ int main()
 		}
 		);
 
-	   _sleep(400);
+		std::this_thread::sleep_for(std::chrono::milliseconds(499));
+
 		plt.reset();
 	
 
