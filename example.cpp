@@ -10,10 +10,12 @@
 #include <random>
 #include <thread>
 
-using namespace plotcpp;
+using namespace plotcxx;
 
 int main()
 {
+ 
+	 
 
 
 	std::vector<int> data(69, 0);
@@ -21,23 +23,23 @@ int main()
 	static std::random_device rnd_device;
 	 
 	static std::mt19937 mersenne_engine(rnd_device());
-	std::uniform_int_distribution<int> dist(-12, 5);
+	std::uniform_int_distribution<int> dist(0, 10);
 
 
 
-	plotcpp::plot_gnuplot plt;
+	plotcxx::plot_gnuplot plt;
 	size_t index = 0;
 
 	plt << "set title " + gpStr("Test plotcpp");
 	plt << "set xlabel " + gpStr("Time [ms]") << "set ylabel " + gpStr("Dist");
 
 
-	for (int i=0; /*i<4*/ ;++i)
+	for (int i=0; i<4 ;++i)
 	{
 
 		std::generate(begin(data), end(data), [&] {  return dist(mersenne_engine); });
 
-
+		 
 		plt.plot2d(begin(data), end(data), [=](const auto element) mutable
 		{
 	 		return std::make_tuple(++index, element); 
@@ -46,6 +48,7 @@ int main()
 	
 	
 		auto s = std::accumulate(begin(data), end(data), 0.0) / data.size();
+	 
 		plt.plot2d(begin(data), end(data), [=](const auto element) mutable
 		{
 			 return std::make_tuple(++index, s);

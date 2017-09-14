@@ -17,7 +17,7 @@
 #include "plot_types.h"
 #include "plot_defines.h"
  
-namespace plotcpp
+namespace plotcxx
 {
 	
 	std::string gpStr(const std::string &in)
@@ -31,24 +31,7 @@ namespace plotcpp
 	class plot_gnuplot
 	{
 	public:
-		plot_gnuplot()
-		{
-			open();
-		}
-		~plot_gnuplot()
-		{
-			close();
-		}
-
-		void reset()
-		{
-			buffer.str(std::string(""));
-			for (std::string f : listOfFilename)
-			{
-				std::remove(f.c_str());
-			}
-			listOfFilename.clear();
-		}
+	
 
 		template< class InputIt, class Extractor>
 		void plot2d(const InputIt first, const InputIt last, Extractor extract)
@@ -75,8 +58,8 @@ namespace plotcpp
 
 			flush(file);
 
-
-			buffer << gpStr(tmpname) << " using 1:2 with linespoint, ";
+			std::string style = "linespoint";
+			buffer << gpStr(tmpname) << " using 1:2 with "<<style<<", ";
 			executeCmd("plot " + buffer.str());
 
 
@@ -102,7 +85,8 @@ namespace plotcpp
 			std::string tmpname = generateFilename();
 			file.open(tmpname);
 
-			std::for_each(begin(dataPoints), end(dataPoints), [&](Point3DType item) {
+			std::for_each(begin(dataPoints), end(dataPoints), [&](Point3DType item)
+			{
 
 				file << std::get<0>(item) << " " << std::get<1>(item) << " " << std::get<2>(item) << "\n";
 
@@ -119,14 +103,34 @@ namespace plotcpp
 		};
 
 
-		inline plot_gnuplot& operator<<(const std::string &cmdstr) {
+		inline plot_gnuplot& operator<<(const std::string &cmdstr)
+		{
 			executeCmd(cmdstr);
 			executeCmd("replot");
 			return(*this);
 		}
 
-		 size_t index;
+		plot_gnuplot()
+		{
+			open();
+		}
+		~plot_gnuplot()
+		{
+			close();
+		}
 
+		void reset()
+		{
+			buffer.str(std::string(""));
+			
+			std::for_each(begin(listOfFilename),end(listOfFilename),[](std::string item)
+			{ 
+				std::remove(item.c_str());
+			});
+			listOfFilename.clear();
+		}
+
+		  
 	private:
 
 		std::stringstream buffer;
@@ -137,8 +141,9 @@ namespace plotcpp
 		std::string generateFilename()
 		{
 			static int counter;
-
-			listOfFilename.push_back(std::string("gp").append(std::to_string(counter)));
+			std::stringstream s;
+			s << counter;
+			listOfFilename.push_back(std::string("gp").append(s.str()));
 			counter++;
 			return(listOfFilename.back());
 
@@ -163,10 +168,10 @@ namespace plotcpp
 						pclose(gnucmd);
 			#endif
 
-			for (std::string f : listOfFilename)
+			std::for_each(begin(listOfFilename),end(listOfFilename),[](std::string item)
 			{
-				std::remove(f.c_str());
-			}
+				std::remove(item.c_str());
+			});
 		}
 		void executeCmd(const std::string &cmd)
 		{
